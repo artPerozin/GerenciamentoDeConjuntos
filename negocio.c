@@ -132,3 +132,103 @@ void unirConjuntos(int contador) {
 
     printf("Conjunto unido criado no índice %d.\n", contador);
 }
+
+void interseccaoConjuntos(int contador) {
+    int idx1, idx2;
+    printf("Qual primeiro conjunto (0 - %d) que voce deseja fazer a interseccao: ", contador - 1);
+    scanf("%d", &idx1);
+
+    if (idx1 < 0 || idx1 >= contador) {
+        printf("Esse conjunto não existe.\n");
+        return;
+    }
+
+    printf("Qual o segundo conjunto (0 - %d) que voce deseja fazer a interseccao: ", contador - 1);
+    scanf("%d", &idx2);
+
+    if (idx2 < 0 || idx2 >= contador) {
+        printf("Esse conjunto não existe.\n");
+        return;
+    }
+
+    criarNovoConjuntoVazio(contador);
+    int k = 0;
+
+    for (int i = 0; i < COL && mat[idx1][i] != 0; i++) {
+        for (int j = 0; j < COL && mat[idx2][j] != 0; j++) {
+            if (mat[idx1][i] == mat[idx2][j]) {
+                mat[contador][k++] = mat[idx1][i];
+                break;
+            }
+        }
+    }
+
+    printf("Interseção criada no índice %d.\n", contador);
+}
+
+void mostrarUmConjunto(int contador) {
+    if (contador == 0) {
+        printf("Nenhum conjunto criado ainda.\n");
+        return;
+    }
+
+    int idx;
+    printf("Qual conjunto (0 - %d) você deseja exibir: ", contador - 1);
+    scanf("%d", &idx);
+
+    if (idx < 0 || idx >= contador) {
+        printf("Esse conjunto não existe.\n");
+        return;
+    }
+
+    printf("Conjunto %d: ", idx);
+    for (int i = 0; i < COL; i++) {
+        if (mat[idx][i] == 0) break;
+        printf("%d ", mat[idx][i]);
+    }
+    printf("\n");
+}
+
+void mostrarTodosOsConjuntos(int contador) {
+    if (contador == 0) {
+        printf("Nenhum conjunto criado ainda.\n");
+        return;
+    }
+
+    printf("\n=== Lista de todos os conjuntos ===\n");
+    for (int i = 0; i < contador; i++) {
+        printf("Conjunto %d: ", i);
+        int vazio = 1;
+
+        for (int j = 0; j < COL; j++) {
+            if (mat[i][j] == 0) break;
+            printf("%d ", mat[i][j]);
+            vazio = 0;
+        }
+
+        if (vazio) printf("(vazio)");
+        printf("\n");
+    }
+    printf("===================================\n\n");
+}
+
+void fazerBuscaPorUmValor(int valor) {
+    int encontrou = 0;
+
+    printf("Linhas que contêm %d: ", valor);
+    for (int i = 0; i < LIN; i++) {
+        for (int j = 0; j < COL; j++) {
+            if (mat[i][j] == valor) {
+                if (encontrou) printf(", ");
+                printf("Conjunto %d", i);
+                encontrou = 1;
+                break;
+            }
+        }
+    }
+
+    if (!encontrou) {
+        printf("Nenhuma linha contém %d", valor);
+    }
+    printf("\n");
+}
