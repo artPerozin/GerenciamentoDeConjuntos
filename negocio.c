@@ -1,19 +1,39 @@
 #include <stdio.h>
 #include "negocio.h"
 
-#define LIN 8
-#define COL 10
+#define MAX_LIN 50
+#define MAX_COL 50
 
-int mat[LIN][COL] = {0};
+int mat[MAX_LIN][MAX_COL] = {0};
+int LIN, COL;
 
-void criarNovoConjuntoVazio(int contador) {
+void definirTamanhoMatriz() {
+    printf("Digite o numero de conjuntos (max %d): ", MAX_LIN);
+    scanf("%d", &LIN);
+
+    while (LIN < 1 || LIN > MAX_LIN) {
+        printf("Valor invalido. Digite novamente (1-%d): ", MAX_LIN);
+        scanf("%d", &LIN);
+    }
+
+    printf("Digite o tamanho maximo de cada conjunto (max %d): ", MAX_COL);
+    scanf("%d", &COL);
+    
+    while (COL < 1 || COL > MAX_COL) {
+        printf("Valor invalido. Digite novamente (1-%d): ", MAX_COL);
+        scanf("%d", &COL);
+    }
+
+}
+
+int criarNovoConjuntoVazio(int contador) {
     if(contador >= LIN) {
-        printf("Limite máximo de conjuntos atingido!\n");
-        return;
+        printf("Limite maximo de conjuntos atingido!\n");
+        return contador;
     }
 
     printf("conjunto n %d criado com exito! ", contador);
-    contador++;
+    return contador + 1;
 }
 
 void inserirDadosConjunto(int contador) {
@@ -23,11 +43,11 @@ void inserirDadosConjunto(int contador) {
     }
 
     int idx;
-    printf("Qual conjunto (0 - %d) você deseja inserir os dados: ", contador - 1);
+    printf("Qual conjunto (0 - %d) voce deseja inserir os dados: ", contador - 1);
     scanf("%d", &idx);
 
     if (idx < 0 || idx >= contador) {
-        printf("Esse conjunto não existe.\n");
+        printf("Esse conjunto nao existe.\n");
         return;
     }
 
@@ -38,7 +58,7 @@ void inserirDadosConjunto(int contador) {
 
     int espacoDisponivel = COL - pos;
     if (espacoDisponivel == 0) {
-        printf("O conjunto %d já está cheio.\n", idx);
+        printf("O conjunto %d ja esta cheio.\n", idx);
         return;
     }
 
@@ -52,7 +72,7 @@ void inserirDadosConjunto(int contador) {
     }
 
     if (i < espacoDisponivel && valor != 0) {
-        printf("Não há espaço suficiente para todos os valores. Nenhum valor foi inserido.\n");
+        printf("Não ha espaço suficiente para todos os valores. Nenhum valor foi inserido.\n");
         return;
     }
 
@@ -69,7 +89,7 @@ int removerConjunto(int contador) {
     scanf("%d", &idx);
 
     if (idx < 0 || idx >= contador) {
-        printf("Esse conjunto não existe.\n");
+        printf("Esse conjunto nao existe.\n");
         return contador;
     }
 
@@ -92,63 +112,74 @@ int removerConjunto(int contador) {
     return contador;
 }
 
-void unirConjuntos(int contador) {
+int unirConjuntos(int contador) {
+    if(contador >= LIN) {
+        printf("Limite maximo de conjuntos atingido!\n");
+        return contador;
+    }
+
     int idx1, idx2;
     printf("Qual primeiro conjunto (0 - %d) que voce deseja unir: ", contador - 1);
     scanf("%d", &idx1);
 
     if (idx1 < 0 || idx1 >= contador) {
-        printf("Esse conjunto não existe.\n");
-        return;
+        printf("Esse conjunto nao existe.\n");
+        return contador;
     }
 
     printf("Qual o segundo conjunto (0 - %d) que voce deseja unir: ", contador - 1);
     scanf("%d", &idx2);
 
     if (idx2 < 0 || idx2 >= contador) {
-        printf("Esse conjunto não existe.\n");
-        return;
+        printf("Esse conjunto nao existe.\n");
+        return contador;
     }
 
     criarNovoConjuntoVazio(contador);
 
     int k = 0;
     for (int i = 0; i < COL && mat[idx1][i] != 0; i++) {
-        mat[contador-1][k++] = mat[idx1][i];
+        mat[contador][k++] = mat[idx1][i];
     }
 
     for (int i = 0; i < COL && mat[idx2][i] != 0; i++) {
         int existe = 0;
         for (int j = 0; j < k; j++) {
-            if (mat[contador-1][j] == mat[idx2][i]) {
+            if (mat[contador][j] == mat[idx2][i]) {
                 existe = 1;
                 break;
             }
         }
         if (!existe && k < COL) {
-            mat[contador-1][k++] = mat[idx2][i];
+            mat[contador][k++] = mat[idx2][i];
         }
     }
 
-    printf("Conjunto unido criado no índice %d.\n", contador);
+    printf("Conjunto unido criado no indice %d.\n", contador);
+    return contador + 1;
 }
 
-void interseccaoConjuntos(int contador) {
+int interseccaoConjuntos(int contador) {
+    if(contador >= LIN) {
+        printf("Limite maximo de conjuntos atingido!\n");
+        return contador;
+    }
+
     int idx1, idx2;
     printf("Qual primeiro conjunto (0 - %d) que voce deseja fazer a interseccao: ", contador - 1);
     scanf("%d", &idx1);
 
     if (idx1 < 0 || idx1 >= contador) {
-        printf("Esse conjunto não existe.\n");
-        return;
+        printf("Esse conjunto nao existe.\n");
+        return contador;
     }
 
     printf("Qual o segundo conjunto (0 - %d) que voce deseja fazer a interseccao: ", contador - 1);
     scanf("%d", &idx2);
 
     if (idx2 < 0 || idx2 >= contador) {
-        printf("Esse conjunto não existe.\n");
-        return;
+        printf("Esse conjunto nao existe.\n");
+        return contador;
     }
 
     criarNovoConjuntoVazio(contador);
@@ -163,7 +194,8 @@ void interseccaoConjuntos(int contador) {
         }
     }
 
-    printf("Interseção criada no índice %d.\n", contador);
+    printf("Interseção criada no indice %d.\n", contador);
+    return contador + 1;
 }
 
 void mostrarUmConjunto(int contador) {
@@ -177,7 +209,7 @@ void mostrarUmConjunto(int contador) {
     scanf("%d", &idx);
 
     if (idx < 0 || idx >= contador) {
-        printf("Esse conjunto não existe.\n");
+        printf("Esse conjunto nao existe.\n");
         return;
     }
 
@@ -215,7 +247,7 @@ void mostrarTodosOsConjuntos(int contador) {
 void fazerBuscaPorUmValor(int valor) {
     int encontrou = 0;
 
-    printf("Linhas que contêm %d: ", valor);
+    printf("Linhas que contem %d: ", valor);
     for (int i = 0; i < LIN; i++) {
         for (int j = 0; j < COL; j++) {
             if (mat[i][j] == valor) {
@@ -228,7 +260,7 @@ void fazerBuscaPorUmValor(int valor) {
     }
 
     if (!encontrou) {
-        printf("Nenhuma linha contém %d", valor);
+        printf("Nenhuma linha contem %d", valor);
     }
     printf("\n");
 }
