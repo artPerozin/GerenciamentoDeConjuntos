@@ -2,6 +2,7 @@
 #include "negocio.h"
 
 int main() {
+    definirTamanhoMatriz();
     int contador = 0;
     int opcao;
     int c;
@@ -20,20 +21,35 @@ int main() {
         printf("Escolha uma opcao (1-9): ");
 
         if (scanf("%d", &opcao) != 1) {
-            printf("Entrada invalida. Digite um numero.\n");
+            printf("\nEntrada invalida. Digite um numero.\n");
             while ((c = getchar()) != '\n' && c != EOF) { }
             opcao = 0;
         }
 
         switch (opcao) {
-            case 1: criarNovoConjuntoVazio(contador); break;
+            case 1: 
+                contador = criarNovoConjuntoVazio(contador);
+                break;
             case 2: inserirDadosConjunto(contador); break;
-            case 3: removerConjunto(contador); break;
-            case 4: unirConjuntos(contador); break;
-            case 5: interseccaoConjuntos(contador); break;
+            case 3: 
+                contador = removerConjunto(contador);
+                break;
+            case 4: 
+                contador = unirConjuntos(contador);
+                break;
+            case 5: 
+                contador = interseccaoConjuntos(contador);
+                break;
             case 6: mostrarUmConjunto(contador); break;
             case 7: mostrarTodosOsConjuntos(contador); break;
-            case 8: fazerBuscaPorUmValor(contador); break;
+            case 8: 
+                {
+                    int valor;
+                    printf("Digite o valor a buscar: ");
+                    scanf("%d", &valor);
+                    fazerBuscaPorUmValor(valor); 
+                }
+                break;
             case 9: break;
             default:
                 printf("Erro: opcao fora da tabela (1-9)\n");
